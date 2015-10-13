@@ -1,0 +1,21 @@
+machine:
+  environment:
+    ABM_ENV: test
+    GOROOT: ${HOME}/go
+    PATH: ${GOROOT}/bin:${PATH}
+    WORKSPACE: ${HOME}/.go_workspace/src/github.com/abema/abema-server
+  post:
+    - wget https://storage.googleapis.com/golang/go1.5.1.linux-amd64.tar.gz
+    - tar zxvf go1.5.1.linux-amd64.tar.gz
+    - go version
+
+dependencies:
+  override:
+    - go get github.com/osamingo/gochic
+
+test:
+  override:
+    - go test ./...
+  post:
+    - gochic ./...
+
