@@ -18,20 +18,24 @@ func init() {
 
 	err = exec.Command("which", "golint").Run()
 	if err != nil {
+		fmt.Print("Install golint ...")
 		err = exec.Command("go", "get", "github.com/golang/lint/golint").Run()
 		if err != nil {
 			fmt.Println("gochic: failed to install golint")
 			os.Exit(1)
 		}
+		fmt.Println("Done")
 	}
 
 	err = exec.Command("which", "goimports").Run()
 	if err != nil {
+		fmt.Print("Install goimports ...")
 		err = exec.Command("go", "get", "golang.org/x/tools/cmd/goimports").Run()
 		if err != nil {
 			fmt.Println("gochic: failed to install goimports")
 			os.Exit(1)
 		}
+		fmt.Println("Done")
 	}
 
 }
