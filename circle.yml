@@ -9,13 +9,10 @@ machine:
     - tar zxvf go1.5.1.linux-amd64.tar.gz
     - go version
 
-dependencies:
-  override:
-    - go get github.com/osamingo/gochic
-
 test:
+  pre:
+    - go run main.go ./...
   override:
     - go test ./...
   post:
-    - gochic ./...
-
+    - go build ./...

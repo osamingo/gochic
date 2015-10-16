@@ -70,9 +70,9 @@ func usage() {
 func govet() (err error) {
 
 	cmd := exec.Command("go", append([]string{"vet"}, os.Args[1:]...)...)
+	fmt.Printf("Run: %s\n", cmd.Args)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Printf("Run: %s\n", cmd.Args)
 		fmt.Printf("%s\n", out)
 		err = errors.New("gochic: failed to go vet")
 	}
@@ -83,9 +83,9 @@ func govet() (err error) {
 func golint() (err error) {
 
 	cmd := exec.Command("golint", os.Args[1:]...)
+	fmt.Printf("Run: %s\n", cmd.Args)
 	out, _ := cmd.CombinedOutput()
 	if len(out) != 0 {
-		fmt.Printf("Run: %s\n", cmd.Args)
 		fmt.Printf("%s\n", out)
 		err = errors.New("gochic: failed to golint")
 	}
@@ -95,25 +95,15 @@ func golint() (err error) {
 
 func goimports() (err error) {
 
-	args := []string{}
-	for i := range os.Args {
-		if strings.HasSuffix(os.Args[i], "/...") {
-			out, err := exec.Command("go", "list", "-f='{{range .GoFiles}}{{.}} {{end}}'", os.Args[i]).CombinedOutput()
-			if err != nil {
-				return err
-			}
-			args = append(args, string(out[1:len(out)-3]))
-		}
-	}
-
-	if len(args) == 0 {
-		args = append(args, os.Args[1:]...)
+	args := make([]string, 0, len(os.Args)-1)
+	for _, arg := range os.Args[1:] {
+		args = append(args, strings.TrimSuffix(arg, "..."))
 	}
 
 	cmd := exec.Command("goimports", append([]string{"-l=true"}, args...)...)
+	fmt.Printf("Run: %s\n", cmd.Args)
 	out, _ := cmd.CombinedOutput()
 	if len(out) != 0 {
-		fmt.Printf("Run: %s\n", cmd.Args)
 		fmt.Printf("%s\n", out)
 		err = errors.New("gochic: failed to goimports")
 	}
