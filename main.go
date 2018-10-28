@@ -19,7 +19,7 @@ func init() {
 	err = exec.Command("which", "golint").Run()
 	if err != nil {
 		fmt.Print("Install golint ...")
-		err = exec.Command("go", "get", "github.com/golang/lint/golint").Run()
+		err = exec.Command("go", "get", "golang.org/x/lint/golint").Run()
 		if err != nil {
 			fmt.Println("gochic: failed to install golint")
 			os.Exit(1)
